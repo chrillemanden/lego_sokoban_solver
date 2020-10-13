@@ -27,6 +27,10 @@ init_instr = True
 finished_instr = False
 junction_black = False
 
+# motor rotations
+rotations = 1.40
+calc_rotations = 360 * rotations
+
 # motors
 leftMotor = Motor(Port.A)
 rightMotor = Motor(Port.B)
@@ -83,6 +87,16 @@ def lineFollow(speed):
     else:
         robot.drive(speed, 0)
 
+def reverse_line_follow(speed):
+    if (right_black()):
+        # turn slightly right
+        robot.drive(-speed, -0.4*speed)
+    elif(left_black()):
+        #turn slightly left
+        robot.drive(-speed, 0.4*speed)
+    else:
+        robot.drive(-speed, 0)
+
 # turn the vehicle 90 degrees anticlockwise
 def grid_left_tank_turn():
     robot.drive(40, 0)
@@ -100,6 +114,22 @@ def grid_right_tank_turn():
         robot.drive(20, -45)
     while (not left_black()):
         robot.drive(20, -45)
+
+# turn the vehicle 180 degrees
+def grid_180_turn():
+    robot.stop()
+    leftMotor.run_angle(-100, 180, Stop.COAST, False)
+    rightMotor.run_angle(100, 180, Stop.COAST, False)
+    time.sleep(2)
+    while (not right_black()):
+        leftMotor.run_angle(-100, 5, Stop.COAST, False)
+        rightMotor.run_angle(100, 5, Stop.COAST, False)
+        time.sleep(0.1)
+    while (not left_black()):
+        leftMotor.run_angle(-100, 5, Stop.COAST, False)
+        rightMotor.run_angle(100, 5, Stop.COAST, False)
+        time.sleep(0.1)
+
     
 # drive around in a square of four close junctions
 def driveSquare():
@@ -109,15 +139,26 @@ def driveSquare():
         robot.stop()   
 
 # move one UP on the grid
-def up_action():
+def up_action(deliver_can):
     global orient
     global init_instr
     global finished_instr
+    global calc_rotations
     if (orient == north):
-        if (init_instr):
+        if (deliver_can):
+            robot.stop()
+            # drive forward with the can
+            leftMotor.run_angle(100, calc_rotations, Stop.BRAKE, False)
+            rightMotor.run_angle(100, calc_rotations, Stop.BRAKE, False)
+            time.sleep(6)
+            # drive backwards with the can
+            leftMotor.run_angle(-100, calc_rotations, Stop.BRAKE, False)
+            rightMotor.run_angle(-100, calc_rotations, Stop.BRAKE, False)
+            time.sleep(6)
+        elif (init_instr):
             robot.drive(40, 0)
             time.sleep(1)
-        while(not are_both_black()):
+        while(not are_both_black() and not deliver_can):
             lineFollow(50)
         finished_instr = True
     elif(orient == west):
@@ -125,21 +166,32 @@ def up_action():
     elif(orient == east):
         grid_left_tank_turn()
     else:
-        grid_left_tank_turn()
-        grid_left_tank_turn()
+        grid_180_turn()
+
     orient = north
     init_instr = False
 
 # move one DOWN on the grid
-def down_action():
+def down_action(deliver_can):
     global orient
     global init_instr
     global finished_instr
+    global calc_rotations
     if (orient == south):
-        if (init_instr):
+        if (deliver_can):
+            robot.stop()
+            # drive forward with the can
+            leftMotor.run_angle(100, calc_rotations, Stop.BRAKE, False)
+            rightMotor.run_angle(100, calc_rotations, Stop.BRAKE, False)
+            time.sleep(6)
+            # drive backwards with the can
+            leftMotor.run_angle(-100, calc_rotations, Stop.BRAKE, False)
+            rightMotor.run_angle(-100, calc_rotations, Stop.BRAKE, False)
+            time.sleep(6)
+        elif (init_instr):
             robot.drive(40, 0)
             time.sleep(1)
-        while(not are_both_black()):
+        while(not are_both_black() and not deliver_can):
             lineFollow(50)
         finished_instr = True
     elif(orient == east):
@@ -147,22 +199,32 @@ def down_action():
     elif(orient == west):
         grid_left_tank_turn()
     else:
-        grid_left_tank_turn()
-        grid_left_tank_turn()
+        grid_180_turn()
     
     orient = south
     init_instr = False
 
 # move one LEFT on the grid
-def left_action():
+def left_action(deliver_can):
     global orient
     global init_instr
     global finished_instr
+    global calc_rotations
     if (orient == west):
-        if (init_instr):
+        if (deliver_can):
+            robot.stop()
+            # drive forward with the can
+            leftMotor.run_angle(100, calc_rotations, Stop.BRAKE, False)
+            rightMotor.run_angle(100, calc_rotations, Stop.BRAKE, False)
+            time.sleep(6)
+            # drive backwards with the can
+            leftMotor.run_angle(-100, calc_rotations, Stop.BRAKE, False)
+            rightMotor.run_angle(-100, calc_rotations, Stop.BRAKE, False)
+            time.sleep(6)
+        elif (init_instr):
             robot.drive(40, 0)
             time.sleep(1)
-        while(not are_both_black()):
+        while(not are_both_black() and not deliver_can):
             lineFollow(50)
         finished_instr = True
     elif(orient == north):
@@ -170,22 +232,32 @@ def left_action():
     elif(orient == south):
         grid_right_tank_turn()
     else:
-        grid_left_tank_turn()
-        grid_left_tank_turn()
+        grid_180_turn()
     
     orient = west
     init_instr = False
 
 # move one RIGHT on the grid
-def right_action():
+def right_action(deliver_can):
     global orient
     global init_instr
     global finished_instr
+    global calc_rotations
     if (orient == east):
-        if (init_instr):
+        if (deliver_can):
+            robot.stop()
+            # drive forward with the can
+            leftMotor.run_angle(100, calc_rotations, Stop.BRAKE, False)
+            rightMotor.run_angle(100, calc_rotations, Stop.BRAKE, False)
+            time.sleep(6)
+            # drive backwards with the can
+            leftMotor.run_angle(-100, calc_rotations, Stop.BRAKE, False)
+            rightMotor.run_angle(-100, calc_rotations, Stop.BRAKE, False)
+            time.sleep(6)
+        elif (init_instr):
             robot.drive(40, 0)
-            time.sleep(1)
-        while(not are_both_black()):
+            time.sleep(1)            
+        while(not are_both_black() and not deliver_can):
             lineFollow(50)
         finished_instr = True
     elif(orient == south):
@@ -193,38 +265,46 @@ def right_action():
     elif(orient == north):
         grid_right_tank_turn()
     else:
-        grid_left_tank_turn()
-        grid_left_tank_turn()
+        grid_180_turn()
     
     orient = east
     init_instr = False
 
 # execute a string of grid-instructions for the robot to follow
-def execute_instr(instructions):
+def execute_instr(instr):
     global init_instr
     global finished_instr
 
+    # insert f to indicate that is finished at the end
+    instructions = instr + "f"
+
     instr_index = 0
     while(True):
-        if (instr_index >= len(instructions)):
+        if (instr_index >= len(instructions) -1):
             robot.stop()
             brick.display.clear()
             brick.display.text("Finished", (60, 50))
+            break
             while (True):
                 instr_index = 0
         else:
             curr_instr = instructions[instr_index]
+            next_instr = instructions[instr_index+1]
             print("current instruction: " + str(curr_instr))
             init_instr = True
+            deliver_can = False
+            if (curr_instr.isupper() and next_instr.islower()):
+                deliver_can = True
+            curr_instr = curr_instr.lower() 
             while (not finished_instr):
                 if (curr_instr == up):
-                    up_action()
+                    up_action(deliver_can)
                 elif (curr_instr == down):
-                    down_action()
+                    down_action(deliver_can)
                 elif (curr_instr == left):
-                    left_action()
+                    left_action(deliver_can)
                 elif (curr_instr == right):
-                    right_action()
+                    right_action(deliver_can)
                 else:
                     robot.stop()
                     brick.display.clear()
