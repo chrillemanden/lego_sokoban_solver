@@ -1,0 +1,14 @@
+Test of Cross Detection at a Given Speed
+----------------------------------------
+Robot: mvp-slow
+Target Speed: 380
+Target Crossed to pass: 4
+
+New cross -- Number of detected blacks in this cross: 13
+New cross -- Number of detected blacks in this cross: 13
+New cross -- Number of detected blacks in this cross: 13
+New cross -- Number of detected blacks in this cross: 16
+
+Done!
+Passed 4 crosses.
+Found a total of 55 blacks.
