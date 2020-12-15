@@ -1,0 +1,15 @@
+clear 
+close all
+clc
+
+P = '.';
+S = dir(fullfile(P,'*.csv')); 
+for k = 1:numel(S)
+    F = fullfile(P,S(k).name);
+    S(k).data = csvread(F);
+end
+
+for i = 1:5
+   mean([S(1).data(:,2) S(1).data(:,4)])
+    
+end
