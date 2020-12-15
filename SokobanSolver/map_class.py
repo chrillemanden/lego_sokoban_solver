@@ -38,10 +38,10 @@ class map:
         for lines in range(len(self.map)):
             for elements in range(len(self.map[lines])):
                 if (self.map[lines][elements] == 'G') : 
-                    self.pos_goal.append( [lines , elements])
+                    self.pos_goal.append([lines , elements])
                     self.map_dictonary[str(lines)+","+str(elements)] = 1
                 elif (self.map[lines][elements] == 'J') : 
-                    self.pos_cans.append( [lines , elements])
+                    self.pos_cans.append([lines , elements])
                     self.map_dictonary[str(lines)+","+str(elements)] = 1
                 elif (self.map[lines][elements] == 'X') :
                     self.map_dictonary[str(lines)+","+str(elements)] = 0 
